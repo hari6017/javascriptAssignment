@@ -15,7 +15,7 @@ asia1.writable=true;
 //createInterface takes single line as input each time from file
 //start of readline function
 const rl = readline.createInterface({
-    input: fs.createReadStream('files/Indicators.csv')
+    input: fs.createReadStream('Indicators.csv')
   });
   var colname=[];
   var line1=[];
@@ -41,7 +41,7 @@ rl.on('line', function (line){
         {
           if(lineInfo[4]>=1960&&lineInfo[4]<=2015)
           {
-            bar1.push({IndicatorName:lineInfo[2],year:lineInfo[4],value:lineInfo[5]});
+            bar1.push({"IndicatorName":lineInfo[2],"year":lineInfo[4],"value":parseFloat(lineInfo[5])});
           }
         }
       }
@@ -67,6 +67,10 @@ rl.on('line', function (line){
       });
 		//end of on line event
 
+var arr6=[];
+var sum1=0;
+var sumu=0;
+var sumr=0;
           var urbanAndRural=[];
           var sum=0;
 					var obj1={};
@@ -82,6 +86,8 @@ rl.on('line', function (line){
 										{
 											if(bar2[i].year==y)
 												{
+                              sumu=sumu+parseFloat(bar2[i].value);
+                              sumr=sumr+parseFloat(bar2[i+1].value);
       										sum=sum+(parseFloat(bar2[i].value))+(parseFloat(bar2[i+1].value));
       										urbanAndRural.push({CountryName:bar2[i].CountryName,value:sum});
 															urbanAndRural.sort(function(a,b){
@@ -89,7 +95,7 @@ rl.on('line', function (line){
 						});
       											obj1[bar2[i].year]=urbanAndRural;
 
-
+                            sum1=sum1+sum;
 																sum=0;
 
 
@@ -100,20 +106,22 @@ rl.on('line', function (line){
  								}
      					}
         urbanAndRural=[];
-
+arr6.push({"year":y,"urban":sumu,"rural":sumr});
+            sumu=0;
+sumr=0;
    				}
+console.log(arr6);
+//console.log(bar1);
+//console.log(obj1);
 
-console.log(bar1);
-console.log(obj1);
 
-//console.log(colname);
       obj2={};
 
 obj2.India= bar1;
 
-       console.log(obj1);
+       //console.log(obj1);
 ind1.write(JSON.stringify(bar1));
-asia1.write(JSON.stringify(obj1));
+asia1.write(JSON.stringify(arr6));
 
         });
 //end of close event
